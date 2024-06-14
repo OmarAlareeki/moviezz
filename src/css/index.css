@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.buttontrailer {
+  text-decoration: none;
+    border: 1px solid lightblue;
+    padding: 6px;
+    font-family: cursive;
+}

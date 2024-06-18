@@ -62,7 +62,6 @@ li {
   flex-direction: column;
   text-align: left;
   flex-wrap: wrap;
-  width: 300px
 }
 .star {
   position: relative;
@@ -90,6 +89,7 @@ li {
   border-bottom: 0.7em solid #fc0;
   border-left: 1em solid transparent;
   transform: rotate(-35deg);
+  z-index: -1;
 }
 .star:after {
   transform: rotate(35deg);

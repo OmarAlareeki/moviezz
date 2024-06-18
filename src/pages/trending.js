@@ -1,18 +1,16 @@
-import { React, useState, useEffect } from 'react'
-import useDataApi from "../hooks/useFetch";
-import { useLocation } from "react-router-dom";
-import List from "../components/List";
+import React, { useEffect } from 'react';
+import List from '../components/List';
 
-const Trending = ({ setQuery, data }) => {
+const Trending = ({ setQuery, data, page, setPage }) => {
     useEffect(() => {
-        setQuery("discover/movie")
-    }, [setQuery])
-    console.log(data)
+        setQuery("discover/movie"); // Assuming you set the correct API endpoint for trending movies
+    }, [setQuery]);
+
     return (
         <div>
-            <List data={data} />
+            <List data={data} page={page} setPage={setPage}/>
         </div>
-    )
+    );
 }
 
-export default Trending
+export default Trending;

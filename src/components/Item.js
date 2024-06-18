@@ -1,23 +1,24 @@
-import { React } from 'react';
+import React from 'react';
 import Card from 'react-bootstrap/Card';
-import { Link } from "react-router-dom";
 
-const Item = ({ id, title, posterPath, vote, children }) => {
+const Item = ({ id, title, posterPath, vote }) => {
     const apiImageAddress = "http://image.tmdb.org/t/p/";
 
     return (
         <div>
-            <Link to="/itemDetails">
-            <Card style={{ width: '12.5rem' }}>
-                <Card.Img variant="top" src={`${apiImageAddress}w300${posterPath}`} style={{ width: '300px', height: '400px' }} />
+            <Card style={{ width: '12.5rem', marginBottom: '20px' }}>
+                <Card.Img variant="top" src={`${apiImageAddress}w300${posterPath}`} alt={title} style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
                 <Card.Body>
                     <Card.Title>{title}</Card.Title>
-                    <span> <i className="star"><h5>{vote}</h5></i></span>
+                    <Card.Text>
+                        <span>
+                            <i className="star">{vote}</i>
+                        </span>
+                    </Card.Text>
                 </Card.Body>
             </Card>
-            </Link>
         </div>
     )
 }
 
-export default Item
+export default Item;

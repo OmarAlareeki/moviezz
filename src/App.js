@@ -54,10 +54,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './navigation/NavBar';
+import Home from './pages/home';
 import Search from './pages/search';
 import Discover from './pages/discover';
 import Trending from './pages/trending';
 import UpComing from './pages/upcoming';
+import Popular from './pages/popular';
+import Tv from './pages/tv';
 import ItemDetails from './pages/itemDetails';
 import useDataApi from '../src/hooks/useFetch';
 import './css/App.css';
@@ -80,10 +83,13 @@ function App() {
         <Router>
           <Navbar />
           <Routes>
-            <Route path="/search" element={<Search data={data} query={query} setQuery={setQuery} doFetch={doFetch} page={page} setPage={setPage} />} />
+            <Route exact path="/" element={<Home data={data} query={query} setQuery={setQuery} page={page} setPage={setPage} />} /> 
+            <Route path="/search" element={<Search data={data} query={query && "good"} setQuery={setQuery} doFetch={doFetch} page={page} setPage={setPage} />} />
             <Route path="/discover" element={<Discover data={data} query={query} setQuery={setQuery} page={page} setPage={setPage} />} />
             <Route path="/trending" element={<Trending data={data} query={query} setQuery={setQuery} page={page} setPage={setPage} />} />
             <Route path="/upcoming" element={<UpComing data={data} query={query} setQuery={setQuery} page={page} setPage={setPage} />} />
+            <Route path="/popular" element={<Popular data={data} query={query} setQuery={setQuery} page={page} setPage={setPage} />} />
+            <Route path="/tv" element={<Tv data={data} query={query} setQuery={setQuery} page={page} setPage={setPage} />} />
             <Route path="/:type/:id" element={<ItemDetails data={data} />} />
           </Routes>
         </Router>

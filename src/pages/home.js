@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import List from '../components/List';
 
-const Trending = ({ setQuery, data, page, setPage }) => {
+const Home = ({ setQuery, data, page, setPage }) => {
     useEffect(() => {
         setQuery("trending/movie/day"); // Assuming you set the correct API endpoint for trending movies
     }, [setQuery]);
@@ -13,4 +13,4 @@ const Trending = ({ setQuery, data, page, setPage }) => {
     );
 }
 
-export default Trending;
+export default Home;

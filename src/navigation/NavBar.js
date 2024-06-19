@@ -1,6 +1,5 @@
-import React from 'react'
-// import Avatar from '../subComponent/Avatar'
-import Branding from '../components/Branding'
+import React, { useState } from 'react';
+import Branding from '../components/Branding';
 import {
     Nav,
     NavLink,
@@ -10,41 +9,46 @@ import {
     NavBtnLink,
 } from "../navigation/navElements";
 
-const Navbar = props => {
-    return (
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Branding />
-            <Nav>
-                <Bars />
+const Navbar = () => {
+    const [isOpen, setIsOpen] = useState(false);
 
-                <NavMenu>
-                    <NavLink to="/search" >
-                        Search
-                    </NavLink>
-                    <NavLink to="/discover" activestyle = "true">
-                        Discover
-                    </NavLink>
-                    <NavLink to="/trending" activestyle = "true">
-                        Trending
-                    </NavLink>
-                    <NavLink to="/upcoming" activestyle = "true">
-                        Upcoming
-                    </NavLink>
-                    <NavLink to="/countries" activestyle = "true">
-                        Countries
-                    </NavLink>
-                    <NavLink to="/sign-up" activestyle = "true">
-                        Sign Up
-                    </NavLink>
-                </NavMenu>
-                <NavBtn>
-                    <NavBtnLink to="/signin">
-                        Sign In
-                    </NavBtnLink>
-                </NavBtn>
-            </Nav>
-        </div>
-    )
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
+
+    return (
+        <Nav>
+            <Branding />
+            <Bars onClick={toggleMenu} /> {/* Hamburger menu icon */}
+
+            <NavMenu isOpen={isOpen}>
+                <NavLink to="/search" activeStyle={{ fontWeight: "bold", color: "red" }}>
+                    Search
+                </NavLink>
+                <NavLink to="/discover" activeStyle={{ fontWeight: "bold", color: "red" }}>
+                    Discover
+                </NavLink>
+                <NavLink to="/trending" activeStyle={{ fontWeight: "bold", color: "red" }}>
+                    Trending
+                </NavLink>
+                <NavLink to="/upcoming" activeStyle={{ fontWeight: "bold", color: "red" }}>
+                    Upcoming
+                </NavLink>
+                <NavLink to="/popular" activeStyle={{ fontWeight: "bold", color: "red" }}>
+                    Popular
+                </NavLink>
+                <NavLink to="/tv" activeStyle={{ fontWeight: "bold", color: "red" }}>
+                    TV Shows
+                </NavLink>
+            </NavMenu>
+
+            <NavBtn>
+                <NavBtnLink to="/signin">
+                    Sign In
+                </NavBtnLink>
+            </NavBtn>
+        </Nav>
+    );
 }
 
-export default Navbar
+export default Navbar;

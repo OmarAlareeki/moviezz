@@ -14,7 +14,6 @@ const useDataApi = (initialUrl, initialData) => {
 
       try {
         const result = await axios(url);
-
         setData(result.data);
       } catch (error) {
         setIsError(true);

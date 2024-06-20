@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Item from "../components/Item";
 import { useNavigate } from 'react-router-dom';
+import LoopIcon from '@mui/icons-material/Loop';
 
 const ItemDetails = () => {
     const { id } = useParams(); // Get the movie ID from URL params
@@ -27,7 +28,7 @@ const ItemDetails = () => {
     }, [id]);
 
     if (!movie) {
-        return <div>Loading...</div>;
+        return <div style={{textAlign: "center"}}><LoopIcon/></div>;
     }
     console.log(movie)
     const getYearFromDate = (dateString) => {

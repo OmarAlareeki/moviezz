@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Branding from '../components/Branding';
 import {
     Nav,
@@ -8,9 +8,12 @@ import {
     NavBtn,
     NavBtnLink,
 } from "../navigation/navElements";
+import { AuthContext } from "../pages/AuthContext";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { isAuthenticated } = useContext(AuthContext);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -40,13 +43,18 @@ const Navbar = () => {
                 <NavLink to="/tv" activeStyle={{ fontWeight: "bold", color: "red" }}>
                     TV Shows
                 </NavLink>
+                <NavLink activeStyle={{ fontWeight: "bold", color: "red" }}>
+                    {isAuthenticated ? (
+                        <Link to="/favorites">Favorites</Link>
+                    ) : (
+                        <Link to="/signin">Sign In</Link>
+                    )}
+                </NavLink>
             </NavMenu>
 
-            <NavBtn>
-                <NavBtnLink to="/signin">
-                    Sign In
-                </NavBtnLink>
-            </NavBtn>
+            {/* <NavBtn>
+                
+            </NavBtn> */}
         </Nav>
     );
 }

@@ -1,3 +1,5 @@
+// src/pages/AuthContext.js
+
 import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
@@ -46,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, favorites, setFavorites, addFavorite, removeFavorite }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, favorites, addFavorite, removeFavorite }}>
       {children}
     </AuthContext.Provider>
   );

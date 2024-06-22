@@ -1,13 +1,14 @@
+// src/pages/ItemDetails.js
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Item from "../components/Item";
-import { useNavigate } from 'react-router-dom';
 import LoopIcon from '@mui/icons-material/Loop';
+import ShareButton from "../components/ShareButton"; // Correct import path
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ItemDetails = () => {
     const { id } = useParams(); // Get the movie ID from URL params
     const [movie, setMovie] = useState(null);
-    const apiImageAddress = "http://image.tmdb.org/t/p/";
     const navigate = useNavigate(); // Access the history object
 
     useEffect(() => {
@@ -28,15 +29,18 @@ const ItemDetails = () => {
     }, [id]);
 
     if (!movie) {
-        return <div style={{textAlign: "center"}}><LoopIcon/></div>;
+        return <div style={{ textAlign: "center" }}><LoopIcon /></div>;
     }
-    console.log(movie)
+
     const getYearFromDate = (dateString) => {
         return dateString.split('-')[0]; // Split by '-' and take the first part (year)
     };
 
     return (
-        <div>
+        <div style={{margin: "10px"}}>
+            <button 
+                style={{margin: "5px", background: "#56ff0b",color: "black"}} 
+                onClick={() => navigate(-1)}><ArrowBackIcon style={{position: "relative", bottom: "-5px", }}/> Go Back</button>
             <Item
                 posterPath={movie.poster_path}
                 title={movie.original_title}
@@ -45,8 +49,11 @@ const ItemDetails = () => {
             <i>{getYearFromDate(movie.release_date)}</i>
             <h2>{movie.title}</h2>
             <p>{movie.overview}</p>
+            <div>   
 
-            <button onClick={() => navigate(-1)}>go back</button>
+                <ShareButton item={{ id: movie.id, title: movie.title }} />
+            </div>
+           
         </div>
     );
 }

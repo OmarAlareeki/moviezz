@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import ShareButton from "./ShareButton";
 
 const Item = ({ id, title, posterPath, vote }) => {
     const apiImageAddress = "http://image.tmdb.org/t/p/";

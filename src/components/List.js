@@ -1,34 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import useDataApi from '../hooks/useFetch';
+import Button from '@mui/material/Button';
 import Item from './Item';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LoopIcon from '@mui/icons-material/Loop';
+import { AuthContext } from '../pages/AuthContext';
 
 const API_KEY = process.env.REACT_APP_MOVIE_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 const List = ({ data, page, setPage }) => {
-  const { isLoading, isError } = useDataApi();
-  const [favorites, setFavorites] = useState([]);
+  const { favorites, setFavorites, addFavorite, removeFavorite } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    // Load favorites from localStorage or fetch from TMDb if needed
     const sessionId = localStorage.getItem('sessionId');
     if (sessionId) {
-      // Fetch user's favorite movies
-      fetch(`${BASE_URL}/account/{account_id}/favorite/movies?api_key=${API_KEY}&session_id=${sessionId}`)
-        .then(response => response.json())
-        .then(data => {
-          setFavorites(data.results || []);
-        })
-        .catch(err => console.error('Failed to fetch favorites:', err));
+      fetchFavorites(sessionId);
     }
   }, []);
 
-  function handleFavoriteToggle(movie) {
+  const fetchFavorites = (sessionId) => {
+    fetch(`${BASE_URL}/account/{account_id}/favorite/movies?api_key=${API_KEY}&session_id=${sessionId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setFavorites(data.results || []);
+      })
+      .catch(err => console.error('Failed to fetch favorites:', err));
+  };
+
+  const handleFavoriteToggle = (movie) => {
     const sessionId = localStorage.getItem('sessionId');
     if (sessionId) {
       const isFavorite = favorites.some(fav => fav.id === movie.id);
@@ -42,54 +50,54 @@ const List = ({ data, page, setPage }) => {
       };
 
       fetch(`${BASE_URL}/account/{account_id}/favorite?api_key=${API_KEY}&session_id=${sessionId}`, options)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(() => {
-          setFavorites(prevFavorites => {
-            if (isFavorite) {
-              return prevFavorites.filter(fav => fav.id !== movie.id);
-            } else {
-              return [...prevFavorites, movie];
-            }
-          });
+          if (isFavorite) {
+            removeFavorite(movie.id);
+          } else {
+            addFavorite(movie);
+          }
         })
         .catch(err => console.error('Failed to update favorite:', err));
     }
-  }
+  };
 
-  function handleLoadMore() {
+  const handleLoadMore = () => {
     setPage(page + 1);
-  }
+  };
 
-  function handleLoadLess() {
+  const handleLoadLess = () => {
     if (page > 1) {
       setPage(page - 1);
     }
-  }
+  };
 
   return (
     <div>
       {isError && <div>Something went wrong ...</div>}
       {isLoading ? (
-        <span><LoopIcon/></span>
+        <span><LoopIcon /></span>
       ) : (
         <div>
           <ul>
             {data && data.results.map((item) => (
               <li key={item.id}>
-                
-                  <div style={{ border: '1px solid #f7f7f7', margin: '5px' }}>
+                <div style={{ border: '1px solid #f7f7f7', margin: '5px', height: "460px" }}>
                   <Link to={`/data/${item.id}`}>
                     <Item
                       posterPath={item.poster_path}
-                      title={item.original_title}
                       vote={Math.round(item.vote_average)}
                     />
-                    </Link>
-                    <button onClick={() => handleFavoriteToggle(item)}>
-                      {favorites.some(fav => fav.id === item.id) ?  <FavoriteIcon/> : <FavoriteBorderIcon/>}
-                    </button>
-                  </div>
-                
+                  </Link>
+                  <Button onClick={() => handleFavoriteToggle(item)} style={{position: "relative", bottom: "48px", left: "10px"}}>
+                    {favorites.some(fav => fav.id === item.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>
@@ -102,6 +110,6 @@ const List = ({ data, page, setPage }) => {
       </div>
     </div>
   );
-}
+};
 
 export default List;

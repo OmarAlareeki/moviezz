@@ -1,19 +1,14 @@
 import React, { useState, useContext } from 'react';
 import Branding from '../components/Branding';
-import {
-    Nav,
-    NavLink,
-    Bars,
-    NavMenu,
-    NavBtn,
-    NavBtnLink,
-} from "../navigation/navElements";
-import { AuthContext } from "../pages/AuthContext";
+import { Nav, NavLink, Bars, NavMenu } from "../navigation/navElements";
+import { AuthContext } from "../pages/AuthContext"; // Corrected path
 import { Link } from "react-router-dom";
+import Badge from '@mui/material/Badge';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, favorites } = useContext(AuthContext);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -45,16 +40,17 @@ const Navbar = () => {
                 </NavLink>
                 <NavLink activeStyle={{ fontWeight: "bold", color: "red" }}>
                     {isAuthenticated ? (
-                        <Link to="/favorites">Favorites</Link>
+                        <Link to="/favorites">
+                            Favorites
+                            <Badge badgeContent={favorites.length} color="primary" style={{ marginLeft: '5px' }}>
+                                <FavoriteIcon />
+                            </Badge>
+                        </Link>
                     ) : (
                         <Link to="/signin">Sign In</Link>
                     )}
                 </NavLink>
             </NavMenu>
-
-            {/* <NavBtn>
-                
-            </NavBtn> */}
         </Nav>
     );
 }

@@ -1,18 +1,22 @@
+// src/pages/Favorites.js
+
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
+import Button from '@mui/material/Button';
 import Item from '../components/Item';
 import { AuthContext } from '../pages/AuthContext';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ConfirmDialog from '../components/ConfirmDialog'; // Assuming you have a ConfirmDialog component
 
 const API_KEY = process.env.REACT_APP_MOVIE_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-function Favorites() {
+const Favorites = () => {
   const { favorites, setFavorites, removeFavorite } = useContext(AuthContext);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -54,6 +58,20 @@ function Favorites() {
     }
   };
 
+  const confirmDelete = (itemId) => {
+    setDeleteItemId(itemId);
+    setOpenConfirmDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    removeFavorite(deleteItemId);
+    setOpenConfirmDialog(false);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenConfirmDialog(false);
+  };
+
   return (
     <div>
       {isError && <div>Something went wrong ...</div>}
@@ -71,9 +89,9 @@ function Favorites() {
                         posterPath={item.poster_path}
                         vote={Math.round(item.vote_average)}
                       />
-                      <button onClick={() => removeFavorite(item.id)}><DeleteForeverIcon /></button>
                     </div>
-                  </Link>   
+                  </Link>
+                  <Button variant="outlined" color="error" onClick={() => confirmDelete(item.id)}>Delete</Button>
                 </li>
               ))}
             </ul>
@@ -87,8 +105,20 @@ function Favorites() {
         <h3>{page}</h3>
         <Button onClick={handleLoadMore}>Next</Button>
       </div>
+      <ConfirmDialog
+        PaperProps={{
+            style: {
+            backgroundColor: 'Blue',
+            color:'black'
+            },
+        }}
+        open={openConfirmDialog}
+        message="Are you sure you want to delete this item?"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
-}
+};
 
 export default Favorites;
